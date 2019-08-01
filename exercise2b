@@ -1,0 +1,43 @@
+import AP.Common.GDT as apCommonGDT;
+import AP.FO.BusinessPartner.Global;
+
+businessobject CarPark_101 {
+		// Root node must not be specified, it is created implicitly 
+		// Add elements here.
+		[Label("Car Park ID")] element CarParkID : ID;
+		[Label("Car Park Name")] element CarParkName : LANGUAGEINDEPENDENT_LONG_Text;
+		[Label("Car Park Description")] element CarParkDescription : LANGUAGEINDEPENDENT_LONG_Description;
+		[Label("Number of Parking Spaces")] element NumberOfParkingSpaces : IntegerValue;
+	
+		// To declare an element as alternative key, use the [AlternativeKey] annotation. 
+		// Please note:
+		// - An alternative key of type UUID exists implicitly for each node, enabling the node
+		//   to be used as an association target.
+		// - The QueryByElements query is created automatically for each node.
+		// - Code completion is available with CTRL + SPACE.
+		
+		node ParkingSpace [0,n] {
+			// each parking space is assigned a unique identifier
+			[Label("Parking Space ID")] element ParkingSpaceID : ID;
+		
+			// display the ID of the Employee assigned to the parking space
+			[Label("Parking Space Employee ID")] element ParkingSpace_AssignedEmployeeID : ID; 
+		
+			// a parking space may be designated as a "Disabled Friendly" parking space
+			[Label("Is Parking Space Disabled")] element ParkingSpace_Disabled : Indicator;
+		
+			// is there an electric charging station for this parking space ?
+			[Label("Is Electric Charge Station")] element ParkingSpace_ElectricChargeStation : Indicator;
+		
+			// display the license plate number of the employee's car
+			[Label("Vehicle Registration Number")] element Vehicle_RegistrationNumber : LANGUAGEINDEPENDENT_MEDIUM_Text;
+		
+			// for a multi-level car park, we have the possibility to specify a level number
+			[Label("Parking Space Level")] element ParkingSpace_Level : NumberValue;
+
+			// we need to create an association to the SAP BO "Employee"
+			// this allows us to include elements from the Employee BO in our screens 
+			// a parking space may be associated to at most one employee
+			association ToEmployee [0,1] to Employee;
+		}
+}
