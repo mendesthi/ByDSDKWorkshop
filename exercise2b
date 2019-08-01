@@ -1,7 +1,7 @@
 import AP.Common.GDT as apCommonGDT;
 import AP.FO.BusinessPartner.Global;
 
-businessobject CarPark_101 {
+businessobject CarPark_<YourID> {
 		// Root node must not be specified, it is created implicitly 
 		// Add elements here.
 		[Label("Car Park ID")] element CarParkID : ID;
