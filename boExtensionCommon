@@ -1,0 +1,5 @@
+node Common {
+			[Tooltip ("If the employee has been assigned a car parking space, the ID is displayed here.")] 
+			[Label ("Car Parking Space <YourID>")]
+			element Assigned_Car_Parking_Space_ID_101 : ID;
+   	    }
