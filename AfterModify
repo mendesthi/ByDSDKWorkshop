@@ -1,0 +1,56 @@
+/*
+Add your SAP Business ByDesign scripting language implementation for:
+	Business Object: CarPark_<YourID>
+	Node: ParkingSpace
+	Event: AfterModify
+Note:
+- To access the elements of the business object node,
+  use path expressions, for example, this.<element name>.
+- To use code completion, press CTRL+J.
+- This script file is mass-enabled, i.e. the keyword "this"
+  refers to a collection of node instances.
+- The solution uses this script if:
+- the value of any field in the node in which this script is contained is modified.
+- the node itself is modified by another business object within the same solution. 
+*/
+
+import  ABSL;
+import  AP.FO.BusinessPartner.Global;
+
+// Auxiliary flag that will help us decide whether we have to update the ToEmployee association.
+var bUpdateEmployee = false;
+
+if (!this.ToEmployee.IsSet()) {
+// We have an employee indicated for parking space, 
+// the association ToEmployee hasn't been initialized yet. 
+// Set flag to true.
+	bUpdateEmployee = true;
+}
+else if ( this.ToEmployee.IdentificationEmployeeID.EmployeeID.content != this.ParkingSpace_AssignedEmployeeID) {
+// We have an employee indicated for parking space, 
+// association ToEmployee still holds employee that had been associated to space before. 
+//Set flag to true.
+	bUpdateEmployee = true;
+}
+
+if (bUpdateEmployee) {
+// Our association to the employee needs to be refreshed. 
+	
+	//Reset association to the employee first, since the new employee ID might be invalid.
+	this.ToEmployee.Reset();
+
+	// Now look for the details of the given employee. connect to the BO Employee's query...
+	var qryEmployees = Employee.Identification.QueryByEmployeeAttributes;
+	
+	// populate the parameters collection for the query call...
+	var paramEmployee = qryEmployees.CreateSelectionParams();
+	paramEmployee.Add(qryEmployees.EmployeeID.content, "I", "EQ", this.ParkingSpace_AssignedEmployeeID);
+	
+	// execute the query!
+	var resultEmployees = qryEmployees.Execute(paramEmployee);
+	foreach (var oneEmployee in resultEmployees) { 
+	// Since we know that we can have only one employee to the ID
+		this.ToEmployee  = oneEmployee.ToRoot;
+		break;
+	}
+}
