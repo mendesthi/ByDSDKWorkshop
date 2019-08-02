@@ -1,0 +1,6 @@
+		//When a car space is modified, this script will update the 
+	//extension field with the ID of the Parking Space. 
+	var common = this.ToEmployee.CurrentCommon;
+	if (this.ParkingSpaceID != "") {
+		common.Assigned_Car_Parking_Space_ID_<YourID> = this.ParkingSpaceID;
+	}
